@@ -47,7 +47,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined' || !mounted) return
     
     const root = document.documentElement
     if (theme === 'dark') {
@@ -57,16 +57,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       root.classList.remove('dark')
       localStorage.setItem('theme', 'light')
     }
-  }, [theme])
+  }, [theme, mounted])
 
   const toggleTheme = () => {
+    if (!mounted) return
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))
   }
 
-  // Always provide context, even before mount to avoid errors
-  const contextValue = mounted 
-    ? { theme, toggleTheme }
-    : { theme: 'light' as Theme, toggleTheme: () => {} }
+  // Always provide context value, even before mount
+  const contextValue: ThemeContextType = { 
+    theme: mounted ? theme : 'light', 
+    toggleTheme 
+  }
 
   return (
     <ThemeContext.Provider value={contextValue}>
