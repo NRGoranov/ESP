@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+.dark {
+  --foreground-rgb: 0, 255, 65;
+  --background-start-rgb: 10, 26, 10;
+  --background-end-rgb: 5, 15, 5;
+}
+
+* {
+  @apply transition-colors duration-300;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Smooth transitions for theme changes */
+.dark body {
+  background: linear-gradient(
+      to bottom,
+      rgba(0, 255, 65, 0.02),
+      rgba(5, 15, 5, 1)
+    )
+    rgb(var(--background-start-rgb));
+}
+

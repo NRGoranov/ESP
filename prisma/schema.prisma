@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model PriceRecord {
+  id            String   @id @default(uuid())
+  date          String
+  startTime     String   // 'HH:mm'
+  endTime       String   // 'HH:mm'
+  intervalMinutes Int
+  priceEurMwh   Float
+  createdAt     DateTime @default(now())
+
+  @@unique([date, startTime])
+  @@index([date])
+}
+
+model UserAlert {
+  id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  email        String?
+  pushToken    String?  // for web push / external service
+  minPrice     Float    // alert when price >= minPrice (best for selling)
+  timeWindowFrom String?  // optional: 'HH:mm'
+  timeWindowTo   String?  // optional: 'HH:mm'
+  isActive     Boolean  @default(true)
+}
+
