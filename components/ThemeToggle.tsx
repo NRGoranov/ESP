@@ -1,14 +1,34 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useTheme } from './ThemeProvider'
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  // Prevent hydration mismatch by only rendering after mount
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Render placeholder during SSR to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <button
+        className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200 text-gray-700 transition-all duration-300"
+        aria-label="Toggle theme"
+        disabled
+      >
+        <div className="relative h-5 w-5" />
+      </button>
+    )
+  }
 
   return (
     <button
       onClick={toggleTheme}
-      className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200 text-gray-700 transition-all duration-300 hover:bg-gray-300 dark:bg-[#0a1a0a] dark:text-[#00ff41] dark:hover:bg-[#0d2a0d] dark:hover:text-[#ccff00]"
+      className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200 text-gray-700 transition-all duration-300 hover:bg-gray-300 dark:bg-dark-bg-hover dark:text-dark-primary dark:hover:bg-dark-bg-light dark:hover:text-dark-accent"
       aria-label="Toggle theme"
     >
       <div className="relative h-5 w-5">
