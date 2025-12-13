@@ -3,6 +3,7 @@ import './globals.css'
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import ThemeScript from '@/components/ThemeScript'
+import { BackgroundPaths } from '@/components/ui/background-paths'
 
 export const metadata: Metadata = {
   title: 'Цени Електроенергия – Продажби',
@@ -21,6 +22,7 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning>
         <ThemeProvider>
+          <BackgroundPaths />
           <ServiceWorkerRegistration />
           {children}
         </ThemeProvider>

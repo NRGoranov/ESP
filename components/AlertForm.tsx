@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 type AlertFormProps = {
   onSubmit: (data: {
@@ -21,6 +21,15 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
   const [enablePush, setEnablePush] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [notificationPermission, setNotificationPermission] = useState<'default' | 'granted' | 'denied' | null>(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      setNotificationPermission(Notification.permission)
+    }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -59,29 +68,16 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
     }
   }
 
-  const requestNotificationPermission = async () => {
-    if (typeof window === 'undefined') return
-    
-    if ('Notification' in window && Notification.permission === 'default') {
-      const permission = await Notification.requestPermission()
-      if (permission === 'granted') {
-        setEnablePush(true)
-      }
-    } else if (window.Notification && Notification.permission === 'granted') {
-      setEnablePush(true)
-    }
-  }
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 rounded-lg border border-gray-200 bg-white p-6 transition-all duration-300 dark:border-matrix-green/20 dark:bg-matrix-dark-hover dark:shadow-[0_0_20px_rgba(0,255,65,0.1)]">
-      <h3 className="text-xl font-semibold text-gray-800 transition-colors duration-300 dark:text-matrix-green">Настройка на известие</h3>
+    <form onSubmit={handleSubmit} className="space-y-4 rounded-lg border border-gray-200 bg-white p-6 transition-all duration-300 dark:border-dark-bg-light dark:bg-dark-bg-hover dark:shadow-lg">
+      <h3 className="text-xl font-semibold text-gray-800 transition-colors duration-300 dark:text-dark-text">Настройка на известие</h3>
 
       {error && (
-        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700 transition-all duration-300 dark:bg-matrix-dark dark:border dark:border-matrix-yellow/30 dark:text-matrix-yellow">{error}</div>
+        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700 transition-all duration-300 dark:bg-dark-bg dark:border dark:border-dark-accent/30 dark:text-dark-accent">{error}</div>
       )}
 
       <div>
-        <label htmlFor="minPrice" className="block text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-matrix-green">
+        <label htmlFor="minPrice" className="block text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-dark-text">
           Минимална цена (EUR/MWh) *
         </label>
         <input
@@ -92,17 +88,17 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
           value={minPrice}
           onChange={(e) => setMinPrice(e.target.value)}
           required
-          className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 transition-all duration-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-matrix-green/30 dark:bg-matrix-dark dark:text-matrix-green dark:focus:border-matrix-green dark:focus:ring-matrix-green"
-          placeholder="например 100"
+          className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 transition-all duration-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-dark-bg-light dark:bg-dark-bg dark:text-dark-text dark:focus:border-dark-primary dark:focus:ring-dark-primary"
+          placeholder="e.g. 100"
         />
-        <p className="mt-1 text-xs text-gray-500 transition-colors duration-300 dark:text-matrix-green/60">
+        <p className="mt-1 text-xs text-gray-500 transition-colors duration-300 dark:text-dark-text-muted">
           Известие ще се изпрати когато цената е поне толкова висока
         </p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label htmlFor="timeWindowFrom" className="block text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-matrix-green">
+          <label htmlFor="timeWindowFrom" className="block text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-dark-text">
             От (HH:mm)
           </label>
           <input
@@ -110,11 +106,11 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
             id="timeWindowFrom"
             value={timeWindowFrom}
             onChange={(e) => setTimeWindowFrom(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 transition-all duration-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-matrix-green/30 dark:bg-matrix-dark dark:text-matrix-green dark:focus:border-matrix-green dark:focus:ring-matrix-green"
+            className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 transition-all duration-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-dark-bg-light dark:bg-dark-bg dark:text-dark-text dark:focus:border-dark-primary dark:focus:ring-dark-primary"
           />
         </div>
         <div>
-          <label htmlFor="timeWindowTo" className="block text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-matrix-green">
+          <label htmlFor="timeWindowTo" className="block text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-dark-text">
             До (HH:mm)
           </label>
           <input
@@ -122,16 +118,16 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
             id="timeWindowTo"
             value={timeWindowTo}
             onChange={(e) => setTimeWindowTo(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 transition-all duration-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-matrix-green/30 dark:bg-matrix-dark dark:text-matrix-green dark:focus:border-matrix-green dark:focus:ring-matrix-green"
+            className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 transition-all duration-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-dark-bg-light dark:bg-dark-bg dark:text-dark-text dark:focus:border-dark-primary dark:focus:ring-dark-primary"
           />
         </div>
       </div>
-      <p className="text-xs text-gray-500 transition-colors duration-300 dark:text-matrix-green/60">
+      <p className="text-xs text-gray-500 transition-colors duration-300 dark:text-dark-text-muted">
         Опционално: Ограничете известията до определен часови диапазон
       </p>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-matrix-green">
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-dark-text">
           Имейл адрес
         </label>
         <input
@@ -139,8 +135,8 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
           id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 transition-all duration-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-matrix-green/30 dark:bg-matrix-dark dark:text-matrix-green dark:focus:border-matrix-green dark:focus:ring-matrix-green"
-          placeholder="ваш@имейл.com"
+          className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 transition-all duration-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-dark-bg-light dark:bg-dark-bg dark:text-dark-text dark:focus:border-dark-primary dark:focus:ring-dark-primary"
+          placeholder="your@email.com"
         />
       </div>
 
@@ -149,24 +145,61 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
           <input
             type="checkbox"
             checked={enablePush}
-            onChange={(e) => {
-              if (e.target.checked) {
-                requestNotificationPermission()
-              } else {
+            onChange={async (e) => {
+              const shouldEnable = e.target.checked
+              
+              if (!shouldEnable) {
                 setEnablePush(false)
+                return
+              }
+              
+              // Clear previous errors
+              setError(null)
+              
+              // Check if notifications are supported
+              if (typeof window === 'undefined' || !('Notification' in window)) {
+                setError('Браузърът ви не поддържа нотификации')
+                return
+              }
+              
+              // Handle different permission states
+              if (Notification.permission === 'denied') {
+                setError('Разрешенията за нотификации са отказани. Моля, активирайте ги в настройките на браузъра.')
+                return
+              }
+              
+              if (Notification.permission === 'granted') {
+                setEnablePush(true)
+                setNotificationPermission('granted')
+                return
+              }
+              
+              // Request permission (must be called directly from user gesture)
+              if (Notification.permission === 'default') {
+                try {
+                  const permission = await Notification.requestPermission()
+                  setNotificationPermission(permission)
+                  if (permission === 'granted') {
+                    setEnablePush(true)
+                  } else {
+                    setError('Разрешенията за нотификации са отказани.')
+                  }
+                } catch (err) {
+                  setError('Грешка при заявка за разрешение за нотификации')
+                }
               }
             }}
-            className="h-5 w-5 cursor-pointer rounded border-gray-300 text-blue-600 transition-colors duration-300 focus:ring-2 focus:ring-blue-500 dark:border-matrix-green/30 dark:text-matrix-green dark:focus:ring-matrix-green"
+            className="h-5 w-5 cursor-pointer rounded border-gray-300 text-blue-600 transition-colors duration-300 focus:ring-2 focus:ring-blue-500 dark:border-dark-bg-light dark:text-dark-primary dark:focus:ring-dark-primary"
           />
-          <span className="text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-matrix-green">Браузър нотификации</span>
+          <span className="text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-dark-text">Браузър нотификации</span>
         </label>
-        {typeof window !== 'undefined' && !enablePush && 'Notification' in window && Notification.permission === 'default' && (
-          <p className="mt-1 text-xs text-gray-500 transition-colors duration-300 dark:text-matrix-green/60">
+        {mounted && !enablePush && notificationPermission === 'default' && (
+          <p className="mt-1 text-xs text-gray-500 transition-colors duration-300 dark:text-dark-text-muted">
             Ще бъдете помолени за разрешение при запазване
           </p>
         )}
-        {typeof window !== 'undefined' && !enablePush && 'Notification' in window && Notification.permission === 'denied' && (
-          <p className="mt-1 text-xs text-red-500 transition-colors duration-300 dark:text-matrix-yellow">
+        {mounted && !enablePush && notificationPermission === 'denied' && (
+          <p className="mt-1 text-xs text-red-500 transition-colors duration-300 dark:text-dark-accent">
             Разрешенията за нотификации са отказани. Моля, активирайте ги в настройките на браузъра.
           </p>
         )}
@@ -176,7 +209,7 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex-1 rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-all duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 dark:bg-matrix-green dark:text-matrix-dark dark:hover:bg-matrix-yellow dark:hover:text-matrix-dark dark:focus:ring-matrix-yellow"
+          className="flex-1 rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-all duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 dark:bg-dark-primary dark:text-dark-bg dark:hover:bg-dark-accent dark:focus:ring-dark-accent"
         >
           {isSubmitting ? 'Запазване...' : 'Запази известие'}
         </button>
@@ -184,7 +217,7 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 transition-all duration-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-matrix-green/30 dark:text-matrix-green dark:hover:bg-matrix-dark-hover dark:focus:ring-matrix-green"
+            className="rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 transition-all duration-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-dark-bg-light dark:text-dark-text dark:hover:bg-dark-bg-hover dark:focus:ring-dark-primary"
           >
             Отказ
           </button>

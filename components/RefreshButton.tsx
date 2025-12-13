@@ -6,10 +6,12 @@ export default function RefreshButton() {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   const handleRefresh = async () => {
     setIsRefreshing(true)
     setError(null)
+    setSuccessMessage(null)
 
     try {
       const response = await fetch('/api/cron/fetch-prices', {
@@ -24,11 +26,20 @@ export default function RefreshButton() {
       const data = await response.json()
       setLastRefresh(new Date())
       
-      // Show success message briefly
-      setTimeout(() => {
-        // Could show a toast notification here
-        console.log('Prices refreshed:', data)
-      }, 100)
+      // Show detailed success message
+      if (data.results && Array.isArray(data.results)) {
+        const totalFetched = data.results.reduce((sum: number, r: any) => sum + (r.fetched || 0), 0)
+        const totalUpserted = data.results.reduce((sum: number, r: any) => sum + (r.upserted || 0), 0)
+        const errors = data.results.filter((r: any) => r.error)
+        
+        if (errors.length > 0) {
+          setError(`Частичен успех: ${totalUpserted} записа, но има грешки. Проверете конзолата.`)
+        } else if (totalFetched === 0) {
+          setError('Не са намерени данни. Проверете дали IBEX има данни за днес.')
+        } else {
+          setSuccessMessage(`Успешно: ${totalUpserted} записа заредени`)
+        }
+      }
 
       // Trigger a revalidation of all SWR caches
       if (typeof window !== 'undefined') {
@@ -47,17 +58,20 @@ export default function RefreshButton() {
         type="button"
         onClick={handleRefresh}
         disabled={isRefreshing}
-        className="rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-all duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 dark:bg-matrix-green dark:text-matrix-dark dark:hover:bg-matrix-yellow dark:hover:text-matrix-dark dark:focus:ring-matrix-yellow"
+        className="rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-all duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 dark:bg-dark-primary dark:text-dark-bg dark:hover:bg-dark-accent dark:focus:ring-dark-accent"
       >
         {isRefreshing ? 'Обновяване...' : 'Обнови цените'}
       </button>
       {lastRefresh && (
-        <p className="text-xs text-gray-500 transition-colors duration-300 dark:text-matrix-green/70">
+        <p className="text-xs text-gray-500 transition-colors duration-300 dark:text-dark-text-muted">
           Последно обновяване: {lastRefresh.toLocaleTimeString('bg-BG')}
         </p>
       )}
       {error && (
-        <p className="text-xs text-red-600 transition-colors duration-300 dark:text-matrix-yellow">{error}</p>
+        <p className="text-xs text-red-600 transition-colors duration-300 dark:text-dark-accent">{error}</p>
+      )}
+      {successMessage && (
+        <p className="text-xs text-green-600 transition-colors duration-300 dark:text-green-400">{successMessage}</p>
       )}
     </div>
   )

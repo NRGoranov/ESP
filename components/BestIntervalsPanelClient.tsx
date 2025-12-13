@@ -46,8 +46,8 @@ export default function BestIntervalsPanelClient() {
 
   if (error) {
     return (
-      <div className="rounded-lg border border-gray-200 bg-white p-4 transition-all duration-300 dark:border-matrix-green/20 dark:bg-matrix-dark-hover">
-        <p className="text-sm text-red-600 transition-colors duration-300 dark:text-matrix-yellow">Грешка при зареждане</p>
+      <div className="rounded-lg border border-gray-200 bg-white p-4 transition-all duration-300 dark:border-dark-bg-light dark:bg-dark-bg-hover">
+        <p className="text-sm text-red-600 transition-colors duration-300 dark:text-dark-accent">Грешка при зареждане</p>
       </div>
     )
   }

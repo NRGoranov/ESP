@@ -46,12 +46,12 @@ export default function AlertFormClient() {
   return (
     <div>
       {submitSuccess && (
-        <div className="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-700 transition-all duration-300 dark:bg-matrix-dark-hover dark:border dark:border-matrix-green/30 dark:text-matrix-green">
+        <div className="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-700 transition-all duration-300 dark:bg-dark-bg-hover dark:border dark:border-dark-primary/30 dark:text-dark-primary">
           Известието е запазено успешно!
         </div>
       )}
       {submitError && (
-        <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700 transition-all duration-300 dark:bg-matrix-dark-hover dark:border dark:border-matrix-yellow/30 dark:text-matrix-yellow">
+        <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700 transition-all duration-300 dark:bg-dark-bg-hover dark:border dark:border-dark-accent/30 dark:text-dark-accent">
           {submitError}
         </div>
       )}

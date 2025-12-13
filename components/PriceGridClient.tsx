@@ -67,7 +67,7 @@ export default function PriceGridClient() {
   if (error) {
     return (
       <div className="p-8 text-center">
-        <div className="rounded-lg bg-red-50 p-4 text-red-700 transition-colors duration-300 dark:bg-matrix-dark/50 dark:text-matrix-yellow dark:border dark:border-matrix-yellow/30">
+        <div className="rounded-lg bg-red-50 p-4 text-red-700 transition-colors duration-300 dark:bg-dark-bg-hover dark:text-dark-accent dark:border dark:border-dark-accent/30">
           <p className="font-semibold">Грешка при зареждане на данни</p>
           <p className="mt-1 text-sm">{error.message}</p>
         </div>
@@ -78,7 +78,7 @@ export default function PriceGridClient() {
   if (isLoading) {
     return (
       <div className="p-8 text-center">
-        <div className="text-gray-500 transition-colors duration-300 dark:text-matrix-green/70">Зареждане на данни...</div>
+        <div className="text-gray-500 transition-colors duration-300 dark:text-dark-text-muted">Зареждане на данни...</div>
       </div>
     )
   }
