@@ -17,10 +17,9 @@ export default function DaySelector({
 }: DaySelectorProps) {
   const formatDate = (date: Date): string => {
     return date.toLocaleDateString('bg-BG', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
       day: 'numeric',
+      month: 'long',
+      year: 'numeric',
     })
   }
 
@@ -65,7 +64,7 @@ export default function DaySelector({
             type="date"
             value={selectedDate.toISOString().split('T')[0]}
             onChange={handleDateInputChange}
-            className="rounded-lg border border-gray-300 px-3 py-2 text-center text-lg font-semibold transition-all duration-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-dark-bg-light dark:bg-dark-bg-hover dark:text-dark-text dark:focus:border-dark-primary dark:focus:ring-dark-primary"
+            className="date-input-theme rounded-lg border border-gray-300 px-3 py-2 text-center text-lg font-semibold transition-all duration-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-dark-bg-light dark:bg-dark-bg-hover dark:text-dark-text dark:focus:border-dark-primary dark:focus:ring-dark-primary"
           />
           <div className="text-sm text-gray-600 transition-colors duration-300 dark:text-dark-text-muted">{formatDate(selectedDate)}</div>
         </div>
