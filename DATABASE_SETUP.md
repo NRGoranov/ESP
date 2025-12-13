@@ -4,24 +4,47 @@ This guide explains how to set up PostgreSQL for production on Vercel.
 
 ## Step 1: Create PostgreSQL Database
 
-Choose one of these options:
+### Recommended: Neon (Serverless Postgres)
 
-### Option A: Vercel Postgres (Easiest - Recommended)
+**Why Neon?**
+- ✅ Serverless Postgres (perfect for Vercel)
+- ✅ Generous free tier (3 GB storage)
+- ✅ Auto-scaling and connection pooling
+- ✅ Works seamlessly with Prisma
+- ✅ Easy setup through Vercel Marketplace
 
-1. Go to your Vercel project dashboard
-2. Click on **Storage** tab
-3. Click **Create Database**
-4. Select **Postgres**
-5. Choose a name (e.g., `bmssale-db`)
-6. Select a region (closest to your users)
-7. Click **Create**
+**Setup Steps:**
 
-Vercel will automatically:
+1. In Vercel project dashboard, go to **Storage** tab
+2. Click **Create Database** or **Browse Storage**
+3. Scroll to **Marketplace Database Providers**
+4. Click on **Neon** (green 'N' logo)
+5. Click **Continue**
+6. Follow the setup wizard:
+   - Choose a database name (e.g., `bmssale-db`)
+   - Select a region (choose closest to Bulgaria/Europe)
+   - Review pricing (free tier is usually sufficient)
+7. Click **Create** or **Connect**
+
+Neon will automatically:
 - Create the database
-- Add `POSTGRES_URL` environment variable
+- Add `DATABASE_URL` environment variable to your Vercel project
 - Set up connection pooling
+- Configure SSL
 
-**Note:** Vercel Postgres uses `POSTGRES_URL` instead of `DATABASE_URL`. You'll need to map it (see Step 3).
+**That's it!** The `DATABASE_URL` will be automatically set and ready to use.
+
+---
+
+### Alternative Option: Supabase
+
+If you prefer Supabase:
+
+1. In Vercel Storage, select **Supabase**
+2. Follow similar setup steps
+3. Supabase also provides a good free tier and Postgres backend
+
+**Note:** Both Neon and Supabase work identically with Prisma - just use the `DATABASE_URL` they provide.
 
 ---
 
@@ -66,20 +89,18 @@ datasource db {
 
 ---
 
-## Step 3: Set Environment Variable in Vercel
+## Step 3: Verify Environment Variable
 
+**If using Neon (Recommended):**
+- ✅ Neon automatically sets `DATABASE_URL` in your Vercel project
+- ✅ No manual configuration needed!
+- Just verify it exists: Go to **Settings** → **Environment Variables** → Look for `DATABASE_URL`
+
+**If using other providers:**
 1. Go to your Vercel project → **Settings** → **Environment Variables**
-
-2. **If using Vercel Postgres:**
-   - Vercel automatically creates `POSTGRES_URL`
-   - Add a new variable:
-     - **Name:** `DATABASE_URL`
-     - **Value:** Copy the value from `POSTGRES_URL` (or use `$POSTGRES_URL` if Vercel supports variable references)
-     - **Environment:** Production, Preview, Development
-
-3. **If using other providers:**
+2. Add new variable:
    - **Name:** `DATABASE_URL`
-   - **Value:** Your PostgreSQL connection string
+   - **Value:** Your PostgreSQL connection string (from provider dashboard)
    - **Environment:** Production, Preview, Development
 
 **Connection string format:**
@@ -193,10 +214,19 @@ Then update build script:
 
 ## Cost Estimates
 
-- **Vercel Postgres:** Free tier (256 MB), then $20/month for 10 GB
+- **Neon (Recommended):** Free tier (3 GB storage, 1 project), then $19/month for 10 GB
 - **Supabase:** Free tier (500 MB), then $25/month for 8 GB
-- **Railway:** Pay-as-you-go, ~$5-10/month for small apps
-- **Neon:** Free tier (3 GB), then $19/month for 10 GB
+- **Prisma Postgres:** Check current pricing on Vercel Marketplace
+- **Other providers:** Varies
 
-For this app, the free tiers should be sufficient initially.
+**For this app:** Neon's free tier (3 GB) is more than sufficient. You can store years of price data with that!
+
+## Why Neon is Best for This Project
+
+1. **Serverless** - Perfect for Vercel's serverless architecture
+2. **Auto-scaling** - Handles traffic spikes automatically
+3. **Connection pooling** - Built-in, no extra configuration
+4. **Free tier** - 3 GB is plenty for electricity price data
+5. **Easy setup** - One-click through Vercel Marketplace
+6. **Prisma compatible** - Works seamlessly with our setup
 
