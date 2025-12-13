@@ -11,24 +11,43 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
+// Helper to get initial theme safely
+function getInitialTheme(): Theme {
+  if (typeof window === 'undefined') {
+    return 'light'
+  }
+  
+  // Check if theme is already set in HTML (from script tag)
+  const htmlClass = document.documentElement.classList.contains('dark')
+  if (htmlClass) {
+    return 'dark'
+  }
+  
+  // Check localStorage
+  const savedTheme = localStorage.getItem('theme') as Theme | null
+  if (savedTheme) {
+    return savedTheme
+  }
+  
+  // Check system preference
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  return prefersDark ? 'dark' : 'light'
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  // Always start with 'light' to avoid hydration mismatch
   const [theme, setTheme] = useState<Theme>('light')
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    const savedTheme = localStorage.getItem('theme') as Theme | null
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    
-    if (savedTheme) {
-      setTheme(savedTheme)
-    } else if (prefersDark) {
-      setTheme('dark')
-    }
+    // Sync with any changes that might have happened
+    const initialTheme = getInitialTheme()
+    setTheme(initialTheme)
   }, [])
 
   useEffect(() => {
-    if (!mounted) return
+    if (typeof window === 'undefined') return
     
     const root = document.documentElement
     if (theme === 'dark') {
@@ -38,18 +57,19 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       root.classList.remove('dark')
       localStorage.setItem('theme', 'light')
     }
-  }, [theme, mounted])
+  }, [theme])
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))
   }
 
-  if (!mounted) {
-    return <>{children}</>
-  }
+  // Always provide context, even before mount to avoid errors
+  const contextValue = mounted 
+    ? { theme, toggleTheme }
+    : { theme: 'light' as Theme, toggleTheme: () => {} }
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   )
