@@ -5,14 +5,20 @@ Copy and paste these into your Vercel project settings.
 ## Required Variables
 
 ### 1. DATABASE_URL
-**Value:** Your PostgreSQL connection string
-**Example:**
+**Value:** Your Neon PostgreSQL connection string (pooled)
+
+**If using Neon (Recommended):**
 ```
-postgresql://user:password@host:5432/database?sslmode=require
+postgresql://neondb_owner:npg_BuYjc2XDkw6e@ep-holy-flower-a4mw9y38-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require
 ```
 
+**Important:** 
+- ✅ Use the **pooled connection** (has `-pooler` in hostname)
+- ✅ Neon may have already set this automatically - check Environment Variables first!
+- ✅ If not set, add it manually with the value from Neon dashboard
+
 **How to get it:**
-- **Vercel Postgres:** Go to Vercel Dashboard → Storage → Create Database → Copy connection string
+- **Neon:** Dashboard → Connection Details → Copy "Connection string" (pooled version)
 - **Supabase:** Project Settings → Database → Connection String (URI)
 - **Railway:** Database → Connect → Copy PostgreSQL URL
 - **Other:** Your PostgreSQL provider's connection string
