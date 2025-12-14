@@ -8,12 +8,21 @@ export default function OnboardingOverlay() {
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null)
   const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number } | null>(null)
   const [placement, setPlacement] = useState<'top' | 'bottom' | 'left' | 'right' | 'center'>('bottom')
+  const [showTooltip, setShowTooltip] = useState(true)
   const overlayRef = useRef<HTMLDivElement>(null)
   const highlightRef = useRef<HTMLDivElement>(null)
 
   // Update target position when step changes
   useEffect(() => {
     if (!isActive || !currentStep) return
+
+    // For step 3 (price-grid), hide tooltip initially and wait for scroll
+    const isStep3 = currentStepIndex === 2
+    if (isStep3) {
+      setShowTooltip(false)
+    } else {
+      setShowTooltip(true)
+    }
 
     const updatePosition = () => {
       const element = document.querySelector(currentStep.targetSelector)
@@ -28,6 +37,13 @@ export default function OnboardingOverlay() {
 
       const rect = element.getBoundingClientRect()
       setTargetRect(rect)
+      
+      // For step 3, check if element is in viewport before showing tooltip
+      if (isStep3) {
+        const vpHeight = window.innerHeight
+        const isInViewport = rect.top >= 0 && rect.top < vpHeight && rect.bottom > 0
+        setShowTooltip(isInViewport)
+      }
       
       const viewportWidth = window.innerWidth
       const viewportHeight = window.innerHeight
@@ -217,8 +233,10 @@ export default function OnboardingOverlay() {
     window.addEventListener('resize', handleUpdate)
 
     // Scroll target into view to ensure both target and tooltip are visible
+    // For step 3 (price-grid), wait for user to scroll before showing tooltip
     const element = document.querySelector(currentStep.targetSelector)
-    if (element) {
+    
+    if (element && !isStep3) {
       // Calculate if we need to scroll to make both elements visible
       const rect = element.getBoundingClientRect()
       const vpWidth = window.innerWidth
@@ -239,11 +257,12 @@ export default function OnboardingOverlay() {
       window.removeEventListener('scroll', handleUpdate, true)
       window.removeEventListener('resize', handleUpdate)
     }
-  }, [isActive, currentStep])
+  }, [isActive, currentStep, currentStepIndex, showTooltip])
 
-  // Lock body scroll when active
+  // Lock body scroll when active (except for step 3 where we need scrolling)
   useEffect(() => {
-    if (isActive) {
+    const isStep3 = currentStepIndex === 2
+    if (isActive && !isStep3) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
@@ -251,7 +270,7 @@ export default function OnboardingOverlay() {
     return () => {
       document.body.style.overflow = ''
     }
-  }, [isActive])
+  }, [isActive, currentStepIndex])
 
   // Handle keyboard events
   useEffect(() => {
@@ -274,7 +293,7 @@ export default function OnboardingOverlay() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isActive, currentStepIndex, steps.length, next, back, skip])
 
-  if (!isActive || !currentStep || !tooltipPosition) return null
+  if (!isActive || !currentStep || !tooltipPosition || !showTooltip) return null
 
   const isFirstStep = currentStepIndex === 0
   const isLastStep = currentStepIndex === steps.length - 1
