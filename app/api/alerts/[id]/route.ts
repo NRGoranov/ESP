@@ -9,10 +9,10 @@ export const dynamic = 'force-dynamic'
  */
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
   try {
-    const id = params.id
+    const { id } = await Promise.resolve(params)
 
     const alert = await db.userAlert.update({
       where: { id },

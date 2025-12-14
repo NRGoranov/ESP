@@ -53,25 +53,25 @@ export default function RefreshButton() {
   }
 
   return (
-    <div className="flex flex-col items-end gap-2">
+    <div className="flex flex-col items-end gap-1.5 sm:gap-2">
       <button
         type="button"
         onClick={handleRefresh}
         disabled={isRefreshing}
-        className="rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-all duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 dark:bg-dark-primary dark:text-dark-bg dark:hover:bg-dark-accent dark:focus:ring-dark-accent"
+        className="rounded-xl sm:rounded-2xl px-3 py-2 sm:px-4 text-xs sm:text-sm md:text-base font-semibold text-white transition-all duration-200 bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 shadow-lg hover:shadow-xl active:scale-95 min-h-[44px] touch-manipulation whitespace-nowrap"
       >
         {isRefreshing ? 'Обновяване...' : 'Обнови цените'}
       </button>
       {lastRefresh && (
-        <p className="text-xs text-gray-500 transition-colors duration-300 dark:text-dark-text-muted">
-          Последно обновяване: {lastRefresh.toLocaleTimeString('bg-BG')}
+        <p className="text-[10px] sm:text-xs text-gray-500 transition-colors duration-300 dark:text-dark-text-muted text-right">
+          Последно: {lastRefresh.toLocaleTimeString('bg-BG')}
         </p>
       )}
       {error && (
-        <p className="text-xs text-red-600 transition-colors duration-300 dark:text-dark-accent">{error}</p>
+        <p className="text-[10px] sm:text-xs text-red-600 transition-colors duration-300 dark:text-dark-accent text-right max-w-[150px] sm:max-w-none">{error}</p>
       )}
       {successMessage && (
-        <p className="text-xs text-green-600 transition-colors duration-300 dark:text-green-400">{successMessage}</p>
+        <p className="text-[10px] sm:text-xs text-green-600 transition-colors duration-300 dark:text-green-400 text-right">{successMessage}</p>
       )}
     </div>
   )

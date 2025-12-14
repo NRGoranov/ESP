@@ -69,15 +69,15 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 rounded-lg border border-gray-200 bg-white p-6 transition-all duration-300 dark:border-dark-bg-light dark:bg-dark-bg-hover dark:shadow-lg">
-      <h3 className="text-xl font-semibold text-gray-800 transition-colors duration-300 dark:text-dark-text">Настройка на известие</h3>
+    <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 rounded-2xl sm:rounded-3xl glass glass-light p-4 sm:p-5 md:p-6 transition-all duration-300 dark:glass-dark dark:glass-dark-light">
+      <h3 className="text-lg sm:text-xl font-semibold text-gray-800 transition-colors duration-300 dark:text-dark-text">Настройка на известие</h3>
 
       {error && (
-        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700 transition-all duration-300 dark:bg-dark-bg dark:border dark:border-dark-accent/30 dark:text-dark-accent">{error}</div>
+        <div className="rounded-xl sm:rounded-2xl glass glass-light p-2.5 sm:p-3 text-xs sm:text-sm text-red-700 transition-all duration-300 dark:glass-dark dark:glass-dark-light dark:text-red-400 border-red-500/30 dark:border-red-400/30">{error}</div>
       )}
 
       <div>
-        <label htmlFor="minPrice" className="block text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-dark-text">
+        <label htmlFor="minPrice" className="block text-xs sm:text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-dark-text">
           Минимална цена (EUR/MWh) *
         </label>
         <input
@@ -88,7 +88,7 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
           value={minPrice}
           onChange={(e) => setMinPrice(e.target.value)}
           required
-          className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 transition-all duration-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-dark-bg-light dark:bg-dark-bg dark:text-dark-text dark:focus:border-dark-primary dark:focus:ring-dark-primary"
+          className="mt-1 w-full rounded-xl sm:rounded-2xl glass-input px-3 py-2.5 sm:py-2 text-sm sm:text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:glass-input-dark dark:text-dark-text dark:focus:ring-blue-400/50 min-h-[44px]"
           placeholder="e.g. 100"
         />
         <p className="mt-1 text-xs text-gray-500 transition-colors duration-300 dark:text-dark-text-muted">
@@ -96,9 +96,9 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <div>
-          <label htmlFor="timeWindowFrom" className="block text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-dark-text">
+          <label htmlFor="timeWindowFrom" className="block text-xs sm:text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-dark-text">
             От (HH:mm)
           </label>
           <input
@@ -106,11 +106,11 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
             id="timeWindowFrom"
             value={timeWindowFrom}
             onChange={(e) => setTimeWindowFrom(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 transition-all duration-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-dark-bg-light dark:bg-dark-bg dark:text-dark-text dark:focus:border-dark-primary dark:focus:ring-dark-primary"
+            className="mt-1 w-full rounded-xl sm:rounded-2xl glass-input px-3 py-2.5 sm:py-2 text-sm sm:text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:glass-input-dark dark:text-dark-text dark:focus:ring-blue-400/50 min-h-[44px]"
           />
         </div>
         <div>
-          <label htmlFor="timeWindowTo" className="block text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-dark-text">
+          <label htmlFor="timeWindowTo" className="block text-xs sm:text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-dark-text">
             До (HH:mm)
           </label>
           <input
@@ -118,7 +118,7 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
             id="timeWindowTo"
             value={timeWindowTo}
             onChange={(e) => setTimeWindowTo(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 transition-all duration-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-dark-bg-light dark:bg-dark-bg dark:text-dark-text dark:focus:border-dark-primary dark:focus:ring-dark-primary"
+            className="mt-1 w-full rounded-xl sm:rounded-2xl glass-input px-3 py-2.5 sm:py-2 text-sm sm:text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:glass-input-dark dark:text-dark-text dark:focus:ring-blue-400/50 min-h-[44px]"
           />
         </div>
       </div>
@@ -127,7 +127,7 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
       </p>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-dark-text">
+        <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-dark-text">
           Имейл адрес
         </label>
         <input
@@ -135,13 +135,13 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
           id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 transition-all duration-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-dark-bg-light dark:bg-dark-bg dark:text-dark-text dark:focus:border-dark-primary dark:focus:ring-dark-primary"
+          className="mt-1 w-full rounded-xl sm:rounded-2xl glass-input px-3 py-2.5 sm:py-2 text-sm sm:text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:glass-input-dark dark:text-dark-text dark:focus:ring-blue-400/50 min-h-[44px]"
           placeholder="your@email.com"
         />
       </div>
 
       <div>
-        <label className="flex items-center gap-2">
+        <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
             checked={enablePush}
@@ -189,9 +189,9 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
                 }
               }
             }}
-            className="h-5 w-5 cursor-pointer rounded border-gray-300 text-blue-600 transition-colors duration-300 focus:ring-2 focus:ring-blue-500 dark:border-dark-bg-light dark:text-dark-primary dark:focus:ring-dark-primary"
+            className="h-5 w-5 cursor-pointer rounded border-gray-300/50 text-blue-600 transition-colors duration-300 focus:ring-2 focus:ring-blue-500 dark:border-dark-bg-light/50 dark:text-dark-primary dark:focus:ring-dark-primary touch-manipulation"
           />
-          <span className="text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-dark-text">Браузър нотификации</span>
+          <span className="text-xs sm:text-sm font-medium text-gray-700 transition-colors duration-300 dark:text-dark-text">Браузър нотификации</span>
         </label>
         {mounted && !enablePush && notificationPermission === 'default' && (
           <p className="mt-1 text-xs text-gray-500 transition-colors duration-300 dark:text-dark-text-muted">
@@ -205,11 +205,11 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
         )}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-2">
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex-1 rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-all duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 dark:bg-dark-primary dark:text-dark-bg dark:hover:bg-dark-accent dark:focus:ring-dark-accent"
+          className="flex-1 rounded-xl sm:rounded-2xl glass-button px-4 py-3 sm:py-2 text-sm sm:text-base font-semibold text-white transition-all duration-200 bg-blue-500/90 hover:bg-blue-600/90 focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 dark:glass-button-dark dark:bg-blue-500/80 dark:text-white dark:hover:bg-blue-600/90 dark:focus:ring-blue-400/50 min-h-[44px] touch-manipulation"
         >
           {isSubmitting ? 'Запазване...' : 'Запази известие'}
         </button>
@@ -217,7 +217,7 @@ export default function AlertForm({ onSubmit, onCancel }: AlertFormProps) {
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 transition-all duration-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-dark-bg-light dark:text-dark-text dark:hover:bg-dark-bg-hover dark:focus:ring-dark-primary"
+            className="rounded-xl sm:rounded-2xl glass-button px-4 py-3 sm:py-2 text-sm sm:text-base font-medium text-gray-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:glass-button-dark dark:text-dark-text dark:focus:ring-blue-400/50 min-h-[44px] touch-manipulation"
           >
             Отказ
           </button>

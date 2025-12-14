@@ -16,7 +16,7 @@ export default function ThemeToggle() {
   if (!mounted) {
     return (
       <button
-        className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200 text-gray-700 transition-all duration-300"
+        className="relative flex h-11 w-11 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl glass-button text-gray-700 transition-all duration-200 touch-manipulation"
         aria-label="Toggle theme"
         disabled
       >
@@ -28,7 +28,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200 text-gray-700 transition-all duration-300 hover:bg-gray-300 dark:bg-dark-bg-hover dark:text-dark-primary dark:hover:bg-dark-bg-light dark:hover:text-dark-accent"
+      className="relative flex h-11 w-11 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl glass-button text-gray-700 transition-all duration-200 dark:glass-button-dark dark:text-dark-primary touch-manipulation"
       aria-label="Toggle theme"
     >
       <div className="relative h-5 w-5">
