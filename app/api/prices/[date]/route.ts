@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
+import type { PriceRecord } from '@prisma/client'
 
 // Mark as dynamic route (uses params)
 export const dynamic = 'force-dynamic'
@@ -77,7 +78,7 @@ export async function GET(
   }
 
   try {
-    let records = []
+    let records: PriceRecord[] = []
     try {
       // Try to query the database with a timeout
       const queryPromise = db.priceRecord.findMany({
